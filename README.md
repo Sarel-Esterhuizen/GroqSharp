@@ -2,7 +2,7 @@
 
 <table align="center">
     <tr>
-        <td align="center">
+        <td align="center" style="border: none;">
             <img src="https://github.com/Sarel-Esterhuizen/GroqSharp/blob/main/Logo.png?raw=true" alt="GroqSharp Logo" width="300"/>
         </td>
     </tr>
