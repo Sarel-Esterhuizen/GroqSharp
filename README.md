@@ -1,5 +1,9 @@
 # GroqSharp
 
+<div style="text-align:center;">
+<img src="https://github.com/Sarel-Esterhuizen/GroqSharp/blob/main/Logo.png?raw=true" alt="GroqSharp Logo" width="300"/>
+</div>
+
 GroqSharp is a C# client library that makes it easy to interact with  [GroqCloud](https://groq.com/). It's designed to provide a simple and flexible interface, allowing you to seamlessly integrate the Groq service into your C# applications.
 
 ## Why GroqSharp?
