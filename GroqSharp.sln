@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E07BFDD1-2739-4F3A-B2A8-9A492DCC52A0}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{D7A385E9-C05E-4E46-89EB-54C645BAEB15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5D699514-20E1-4083-BDA8-1846458BCADC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp", "Source\GroqSharp\GroqSharp.csproj", "{75581A3F-5FB4-4B30-B131-9B1838BACD1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Tests.Sample", "Tests\GroqSharp.Tests.Sample\GroqSharp.Tests.Sample.csproj", "{604076B4-9759-4D46-8134-AC5838ACD923}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroqSharp.Tests", "Tests\GroqSharp.Tests\GroqSharp.Tests.csproj", "{8EB17B42-D78B-417A-8778-3B5880F5C890}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75581A3F-5FB4-4B30-B131-9B1838BACD1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75581A3F-5FB4-4B30-B131-9B1838BACD1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75581A3F-5FB4-4B30-B131-9B1838BACD1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75581A3F-5FB4-4B30-B131-9B1838BACD1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{604076B4-9759-4D46-8134-AC5838ACD923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{604076B4-9759-4D46-8134-AC5838ACD923}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{604076B4-9759-4D46-8134-AC5838ACD923}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{604076B4-9759-4D46-8134-AC5838ACD923}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{75581A3F-5FB4-4B30-B131-9B1838BACD1B} = {D7A385E9-C05E-4E46-89EB-54C645BAEB15}
+		{604076B4-9759-4D46-8134-AC5838ACD923} = {5D699514-20E1-4083-BDA8-1846458BCADC}
+		{8EB17B42-D78B-417A-8778-3B5880F5C890} = {5D699514-20E1-4083-BDA8-1846458BCADC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {771CA94F-A3B3-44E6-A857-36F986937FB2}
+	EndGlobalSection
+EndGlobal
