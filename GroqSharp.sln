@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E07BFDD1-2739-4F3A-B2A8-9A492DCC52A0}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
+		Logo.png = Logo.png
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -17,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp", "Source\GroqSha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Tests.Sample", "Tests\GroqSharp.Tests.Sample\GroqSharp.Tests.Sample.csproj", "{604076B4-9759-4D46-8134-AC5838ACD923}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroqSharp.Tests", "Tests\GroqSharp.Tests\GroqSharp.Tests.csproj", "{8EB17B42-D78B-417A-8778-3B5880F5C890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Tests", "Tests\GroqSharp.Tests\GroqSharp.Tests.csproj", "{8EB17B42-D78B-417A-8778-3B5880F5C890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,12 +7,41 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>GroqSharp</Title>
     <Authors>Sarel.Esterhuizen</Authors>
-    <Description>A simple lightweight client to consume GroqCloud API.</Description>
+    <Description>GroqSharp is a C# client library that makes it easy to interact with GroqCloud. It's designed to provide a simple and flexible interface, allowing you to seamlessly integrate the Groq service into your C# applications.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/Sarel-Esterhuizen/GroqSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Sarel-Esterhuizen/GroqSharp</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>© 2024 Sarel Esterhuizen</Copyright>
+    <PackageTags>"C#", "Groq", "API", "Client", "Chatbot", "Language Models", "GroqSharp", "Llama 3"</PackageTags>
+    <PackageReleaseNotes>Initial release of GroqSharp:
+- Fluent API for setting up client configurations.
+- Supports synchronous and streaming chat completions.
+- Offers structured response handling with custom JSON formats.
+- Configurable retry policy for robust interactions.
+</PackageReleaseNotes>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>Logo.png</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>$(AssemblyName).Tests</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
