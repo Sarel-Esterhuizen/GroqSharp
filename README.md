@@ -4,41 +4,41 @@
 [![Build and Test](https://github.com/Sarel-Esterhuizen/GroqSharp/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/Sarel-Esterhuizen/GroqSharp/actions/workflows/build-and-test.yml)
 [![Publish to NuGet](https://github.com/Sarel-Esterhuizen/GroqSharp/actions/workflows/publish-to-nuget.yml/badge.svg)](https://github.com/Sarel-Esterhuizen/GroqSharp/actions/workflows/publish-to-nuget.yml)
 
-GroqSharp is a C# client library that makes it easy to interact with  [GroqCloud](https://groq.com/). It's designed to provide a simple and flexible interface, allowing you to seamlessly integrate the Groq service into your C# applications.
+GroqSharp is a community maintained C# client library for interacting with [GroqCloud](https://groq.com/). Designed to provide a simple and flexible interface, it enables seamless integration of Groq services into your C# applications.
 
 ## Why GroqSharp?
 
-GroqSharp aims to simplify and streamline your interactions with Groq, offering:
+GroqSharp is designed to simplify your interactions with GroqCloud by offering:
 
-- **Fluent API**: Set up client options and parameters fluently for convenient configuration.
-- **Structured Responses**: Define specific JSON response structures for more predictable outputs.
-- **Retry Mechanism**: Configurable retry policies ensure robust interactions, even in the face of transient errors.
-- **Streaming Support**: Allows for streaming responses, processing data as it becomes available.
+- **Fluent API**: Configure client options and parameters fluently for convenient setup.
+- **Structured Responses**: Utilize specific JSON response structures for predictable outputs.
+- **Retry Mechanism**: Implement configurable retry policies to handle transient errors effectively.
+- **Streaming Support**: Support for streaming responses to process data as it becomes available.
 
 ## Getting Started
 
 ### Installation
 
-To install GroqSharp via NuGet:
+Install GroqSharp via NuGet:
 
 ```bash
 dotnet add package GroqSharp
 ```
 
-### API Key and Model
+### Environment Setup
 
-You'll need an API key and model to connect to the Groq service. Once acquired, they can be integrated as follows:
+For security and flexibility, it is recommended to store your API key in an environment variable. This prevents hardcoding sensitive information in your source code:
 
 ```csharp
-var apiKey = "<your-api-key>";
-var apiModel = "llama3-70b-8192"; // Or other supported
+var apiKey = Environment.GetEnvironmentVariable("GROQ_API_KEY");
+var apiModel = "llama3-70b-8192"; // Or other supported model
 
 var groqClient = new GroqClient(apiKey, apiModel);
 ```
 
 ### Fluent Configuration
 
-You can configure your client fluently by chaining various setup options:
+Configure your client using a fluent API:
 
 ```csharp
 IGroqClient groqClient = new GroqClient(apiKey, apiModel)
@@ -46,42 +46,45 @@ IGroqClient groqClient = new GroqClient(apiKey, apiModel)
     .SetMaxTokens(512)
     .SetTopP(1)
     .SetStop("NONE")
-    .SetStructuredRetryPolicy(5) // Retry up to 5 times on failure
-    .SetDefaultSystemMessage(new Message { Role = MessageRole.System, Content = "You are a drunk assistant with a love for fluffy carpets." }); // Default system message
+    .SetStructuredRetryPolicy(5); // Retry up to 5 times on failure
 ```
 
 ### Examples
 
+Here are a few examples of how to use GroqSharp for different types of interactions:
+
 #### 1. Synchronous Chat Completion (Non-JSON)
+
+Example demonstrating a synchronous chat completion:
 
 ```csharp
 var response = await groqClient.CreateChatCompletionAsync(
-    new Message { Role = MessageRole.System, Content = "You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability." },
-    new Message { Role = MessageRole.Assistant, Content = "The user only knows the pain from using commercial models like ChatGPT, and it's the first time they're using Groq." },
+    new Message { Role = MessageRole.System, Content = "You are a helpful, smart, kind, and efficient AI assistant." },
+    new Message { Role = MessageRole.Assistant, Content = "This is your first time using Groq, after experiencing other commercial models." },
     new Message { Role = MessageRole.User, Content = "Explain the importance of fast language models." }
 );
 ```
 
 #### 2. Synchronous Chat Completion (JSON)
 
-You can customize the default retry of 3 using the fluent `SetRetryPolicy`. Since models can inherently not return JSON, be sure to handle error conditions. Be aware that extra costs can be incurred with excessive retries. The client will automatically add JSON instructions to the system message, but feel free to add more.
+Handle JSON structured responses and retries:
 
 ```csharp
-var jsonStructure = @"
-{
-    ""name"": ""string"",
-    ""powers"": {
-        ""rank"": ""string"",
-        ""abilities"": ""string""
-    }
-}
-";
-
 try
 {
-    response = await groqClient.GetStructuredChatCompletionAsync(jsonStructure,
+    var jsonStructure = @"
+    {
+        ""name"": ""string"",
+        ""powers"": {
+            ""rank"": ""string"",
+            ""abilities"": ""string""
+        }
+    }
+    ";
+
+    var response = await groqClient.GetStructuredChatCompletionAsync(jsonStructure,
         new Message { Role = MessageRole.System, Content = "You are a helpful, smart, kind, and efficient AI assistant." },
-        new Message { Role = MessageRole.User, Content = "Give me a few Pokémon characters." }
+        new Message { Role = MessageRole.User, Content = "List a few Pokémon characters." }
     );
 
     Console.WriteLine(response);
@@ -94,13 +97,15 @@ catch (Exception ex)
 
 #### 3. Streaming Chat Completion
 
+Stream responses for interactive sessions:
+
 ```csharp
 try
 {
     var messages = new[]
     {
-        new Message { Role = MessageRole.User, Content = "Give some lyrics to a song." },
-        new Message { Role = MessageRole.System, Content = "You are the love child of Britney Spears and Eminem." }
+        new Message { Role = MessageRole.User, Content = "Provide some song lyrics." },
+        new Message { Role = MessageRole.System, Content = "You are the muse for many songwriters." }
     };
 
     await foreach (var streamingResponse in groqClient.CreateChatCompletionStreamAsync(messages))
@@ -121,8 +126,8 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 ## License
 
-This library is licensed under the MIT License. See the LICENSE file for more information.
+This library is licensed under the MIT License. See the LICENSE file for more details.
 
 ## Conclusion
 
-GroqSharp offers a flexible and streamlined way to work with the Groq service in your C# projects. You can easily configure its settings, handle structured responses, and manage different interaction types, making it an invaluable tool for any C# developer looking to integrate Groq's capabilities.
+GroqSharp offers a flexible and efficient way to incorporate Groq's capabilities into your C# projects, ensuring secure and configurable interaction management.
