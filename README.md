@@ -1,6 +1,7 @@
 # GroqSharp
 
 [![NuGet Badge](https://buildstats.info/nuget/GroqSharp)](https://www.nuget.org/packages/GroqSharp)
+[![Build and Test](https://github.com/Sarel-Esterhuizen/GroqSharp/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/Sarel-Esterhuizen/GroqSharp/actions/workflows/build-and-test.yml)
 
 GroqSharp is a C# client library that makes it easy to interact with  [GroqCloud](https://groq.com/). It's designed to provide a simple and flexible interface, allowing you to seamlessly integrate the Groq service into your C# applications.
 
