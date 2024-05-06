@@ -104,8 +104,8 @@ try
 {
     var messages = new[]
     {
-        new Message { Role = MessageRole.User, Content = "Provide some song lyrics." },
-        new Message { Role = MessageRole.System, Content = "You are the muse for many songwriters." }
+        new Message { Role = MessageRole.User, Content = "Give some lyrics to a song." },
+        new Message { Role = MessageRole.System, Content = "You are the love child of Britney Spears and Eminem." }
     };
 
     await foreach (var streamingResponse in groqClient.CreateChatCompletionStreamAsync(messages))
