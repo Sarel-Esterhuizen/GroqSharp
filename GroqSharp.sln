@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E07BFDD1-2739-4F3A-B2A8-9A492DCC52A0}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
+		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
 		Logo.png = Logo.png
 		README.md = README.md
 	EndProjectSection

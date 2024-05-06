@@ -66,8 +66,10 @@ namespace GroqSharp.Tests
             var json = request.ToJson(indented: true);
 
             // Assert
-            Assert.Contains("{\r\n  \"model\": \"llama3-70b-8192\"", json);
+            string expectedString = $"{{{Environment.NewLine}  \"model\": \"llama3-70b-8192\"";
+            Assert.Contains(expectedString, json);
         }
+
 
         [Fact]
         public void ToJson_AddsJsonResponseFormatWhenJsonResponseIsTrue()
