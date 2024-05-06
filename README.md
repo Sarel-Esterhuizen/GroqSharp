@@ -115,6 +115,14 @@ catch (Exception ex)
 }
 ```
 
-### Conclusion
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+## License
+
+This library is licensed under the MIT License. See the LICENSE file for more information.
+
+## Conclusion
 
 GroqSharp offers a flexible and streamlined way to work with the Groq service in your C# projects. You can easily configure its settings, handle structured responses, and manage different interaction types, making it an invaluable tool for any C# developer looking to integrate Groq's capabilities.
