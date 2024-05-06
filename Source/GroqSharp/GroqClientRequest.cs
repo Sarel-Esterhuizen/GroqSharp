@@ -7,6 +7,8 @@ namespace GroqSharp
 {
     internal record GroqClientRequest
     {
+        #region Instance Properties
+
         [JsonPropertyName("model")]
         public string Model { get; init; }
 
@@ -31,6 +33,16 @@ namespace GroqSharp
         [JsonIgnore]
         public bool JsonResponse { get; set; } = false;
 
+        [JsonPropertyName("tools")]
+        public object Tools { get; set; }
+
+        [JsonPropertyName("tool_choice")]
+        public string ToolChoice { get; set; } = "none";
+
+        #endregion
+
+        #region Instance Methods
+
         public string ToJson(bool indented = false)
         {
             var options = new JsonSerializerOptions
@@ -45,9 +57,6 @@ namespace GroqSharp
             {
                 writer.WriteStartObject();
 
-                // Regretting not using Newtonsoft like a normal person right now.
-                // Perhaps there is a wiser person out there that can get a less verbose version working.
-
                 writer.WriteString("model", Model);
                 if (Temperature.HasValue)
                     writer.WriteNumber("temperature", Temperature.Value);
@@ -59,10 +68,16 @@ namespace GroqSharp
                     writer.WriteString("stop", Stop);
                 writer.WriteBoolean("stream", Stream);
 
+                // Serialize each message according to its actual type
                 if (Messages != null)
                 {
                     writer.WritePropertyName("messages");
-                    JsonSerializer.Serialize(writer, Messages, options);
+                    writer.WriteStartArray();
+                    foreach (var message in Messages)
+                    {
+                        JsonSerializer.Serialize(writer, message, message.GetType(), options);
+                    }
+                    writer.WriteEndArray();
                 }
 
                 if (JsonResponse)
@@ -73,11 +88,24 @@ namespace GroqSharp
                     writer.WriteEndObject();
                 }
 
+                if (Tools != null)
+                {
+                    writer.WritePropertyName("tools");
+                    JsonSerializer.Serialize(writer, Tools, options);
+                }
+
+                if (!string.IsNullOrEmpty(ToolChoice) && ToolChoice != "none")
+                {
+                    writer.WriteString("tool_choice", ToolChoice);
+                }
+
                 writer.WriteEndObject();
                 writer.Flush();
             }
 
             return Encoding.UTF8.GetString(stream.ToArray());
         }
+
+        #endregion
     }
 }

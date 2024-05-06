@@ -1,23 +1,21 @@
-﻿using GroqSharp.Utilities;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace GroqSharp.Models
 {
-    public class Message
+    public class MessageTool : 
+        Message
     {
         #region Instance Properties
 
-        [JsonConverter(typeof(LowercaseEnumConverter<MessageRoleType>))]
-        public MessageRoleType Role { get; set; }  
-
-        public required string Content { get; set; }
+        [JsonPropertyName("tool_call_id")]
+        public string ToolCallId { get; set; }
 
         #endregion
 
         #region Instance Methods
 
-        public virtual string ToJson()
+        public override string ToJson()
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {

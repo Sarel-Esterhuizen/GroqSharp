@@ -12,8 +12,12 @@ GroqSharp is designed to simplify your interactions with GroqCloud by offering:
 
 - **Fluent API**: Configure client options and parameters fluently for convenient setup.
 - **Structured Responses**: Utilize specific JSON response structures for predictable outputs.
-- **Retry Mechanism**: Implement configurable retry policies to handle transient errors effectively.
-- **Streaming Support**: Support for streaming responses to process data as it becomes available.
+- **Function Integration**: Integrate and manage function calling within your applications.
+- **Retry Mechanism**: Implement configurable retry policies to handle transient errors when working with structured data effectively.
+- **Streaming Support**: Support for streaming responses to process data as it becomes available, providing real-time interaction capabilities.
+
+GroqSharp's function/tool integration support allows developers to extend the functionality of the Groq platform within their applications, making it easier to implement complex workflows and data manipulations directly within chat interfaces.
+
 
 ## Getting Started
 
@@ -51,74 +55,12 @@ IGroqClient groqClient = new GroqClient(apiKey, apiModel)
 
 ### Examples
 
-Here are a few examples of how to use GroqSharp for different types of interactions:
+Explore sample projects that demonstrate various capabilities of GroqSharp:
 
-#### 1. Synchronous Chat Completion (Non-JSON)
-
-Example demonstrating a synchronous chat completion:
-
-```csharp
-var response = await groqClient.CreateChatCompletionAsync(
-    new Message { Role = MessageRole.System, Content = "You are a helpful, smart, kind, and efficient AI assistant." },
-    new Message { Role = MessageRole.Assistant, Content = "This is your first time using Groq, after experiencing other commercial models." },
-    new Message { Role = MessageRole.User, Content = "Explain the importance of fast language models." }
-);
-```
-
-#### 2. Synchronous Chat Completion (JSON)
-
-Handle JSON structured responses and retries:
-
-```csharp
-try
-{
-    var jsonStructure = @"
-    {
-        ""name"": ""string"",
-        ""powers"": {
-            ""rank"": ""string"",
-            ""abilities"": ""string""
-        }
-    }
-    ";
-
-    var response = await groqClient.GetStructuredChatCompletionAsync(jsonStructure,
-        new Message { Role = MessageRole.System, Content = "You are a helpful, smart, kind, and efficient AI assistant." },
-        new Message { Role = MessageRole.User, Content = "List a few Pokémon characters." }
-    );
-
-    Console.WriteLine(response);
-}
-catch (Exception ex)
-{
-    Console.WriteLine("Error: " + ex.Message);
-}
-```
-
-#### 3. Streaming Chat Completion
-
-Stream responses for interactive sessions:
-
-```csharp
-try
-{
-    var messages = new[]
-    {
-        new Message { Role = MessageRole.User, Content = "Give some lyrics to a song." },
-        new Message { Role = MessageRole.System, Content = "You are the love child of Britney Spears and Eminem." }
-    };
-
-    await foreach (var streamingResponse in groqClient.CreateChatCompletionStreamAsync(messages))
-    {
-        Console.Write(streamingResponse);
-    }
-    Console.WriteLine();
-}
-catch (Exception ex)
-{
-    Console.WriteLine("Error: " + ex.Message);
-}
-```
+- [**Chat Basics**](./Samples/GroqSharp.Samples.ChatBasics/README.md) - Basic chat functionalities.
+- [**Chat Streaming**](./Samples/GroqSharp.Samples.ChatStreaming/README.md) - Streaming responses for dynamic interaction.
+- [**Structured Data**](./Samples/GroqSharp.Samples.StructuredData/README.md) - Handling structured JSON responses.
+- [**Tool Integration**](./Samples/GroqSharp.Samples.ToolIntegration/README.md) - Using custom tools for enhanced functionalities.
 
 ## Contributing
 

@@ -16,15 +16,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5D699514
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp", "Source\GroqSharp\GroqSharp.csproj", "{75581A3F-5FB4-4B30-B131-9B1838BACD1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Tests.Sample", "Tests\GroqSharp.Tests.Sample\GroqSharp.Tests.Sample.csproj", "{604076B4-9759-4D46-8134-AC5838ACD923}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Tests", "Tests\GroqSharp.Tests\GroqSharp.Tests.csproj", "{8EB17B42-D78B-417A-8778-3B5880F5C890}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Workflows", "Solution Workflows", "{413F09BE-5922-4376-AC7B-6528D7E909D4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{413F09BE-5922-4376-AC7B-6528D7E909D4}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
 		.github\workflows\publish-to-nuget.yml = .github\workflows\publish-to-nuget.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}"
+	ProjectSection(SolutionItems) = preProject
+		Samples\README.md = Samples\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Samples.ChatBasics", "Samples\GroqSharp.Samples.ChatBasics\GroqSharp.Samples.ChatBasics.csproj", "{280256B2-6EC7-434F-9A08-7065E9B123C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Samples.StructuredData", "Samples\GroqSharp.Samples.StructuredData\GroqSharp.Samples.StructuredData.csproj", "{A4C8BBC0-F517-4CDD-867D-99C097D061A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Samples.ToolIntegration", "Samples\GroqSharp.Samples.ToolIntegration\GroqSharp.Samples.ToolIntegration.csproj", "{FF084234-9F51-456C-8EC1-2F9D2AE14D19}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Samples.ChatStreaming", "Samples\GroqSharp.Samples.ChatStreaming\GroqSharp.Samples.ChatStreaming.csproj", "{FAD868B7-556E-4D9A-BFB4-A4C316217770}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,22 +47,38 @@ Global
 		{75581A3F-5FB4-4B30-B131-9B1838BACD1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75581A3F-5FB4-4B30-B131-9B1838BACD1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75581A3F-5FB4-4B30-B131-9B1838BACD1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{604076B4-9759-4D46-8134-AC5838ACD923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{604076B4-9759-4D46-8134-AC5838ACD923}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{604076B4-9759-4D46-8134-AC5838ACD923}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{604076B4-9759-4D46-8134-AC5838ACD923}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EB17B42-D78B-417A-8778-3B5880F5C890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{280256B2-6EC7-434F-9A08-7065E9B123C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{280256B2-6EC7-434F-9A08-7065E9B123C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{280256B2-6EC7-434F-9A08-7065E9B123C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{280256B2-6EC7-434F-9A08-7065E9B123C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4C8BBC0-F517-4CDD-867D-99C097D061A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C8BBC0-F517-4CDD-867D-99C097D061A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C8BBC0-F517-4CDD-867D-99C097D061A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C8BBC0-F517-4CDD-867D-99C097D061A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF084234-9F51-456C-8EC1-2F9D2AE14D19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF084234-9F51-456C-8EC1-2F9D2AE14D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF084234-9F51-456C-8EC1-2F9D2AE14D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF084234-9F51-456C-8EC1-2F9D2AE14D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD868B7-556E-4D9A-BFB4-A4C316217770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD868B7-556E-4D9A-BFB4-A4C316217770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD868B7-556E-4D9A-BFB4-A4C316217770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD868B7-556E-4D9A-BFB4-A4C316217770}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{75581A3F-5FB4-4B30-B131-9B1838BACD1B} = {D7A385E9-C05E-4E46-89EB-54C645BAEB15}
-		{604076B4-9759-4D46-8134-AC5838ACD923} = {5D699514-20E1-4083-BDA8-1846458BCADC}
 		{8EB17B42-D78B-417A-8778-3B5880F5C890} = {5D699514-20E1-4083-BDA8-1846458BCADC}
+		{967C88C3-30F5-4EE0-A2DC-C28A6F96D32E} = {5D699514-20E1-4083-BDA8-1846458BCADC}
+		{280256B2-6EC7-434F-9A08-7065E9B123C1} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
+		{A4C8BBC0-F517-4CDD-867D-99C097D061A0} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
+		{FF084234-9F51-456C-8EC1-2F9D2AE14D19} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
+		{FAD868B7-556E-4D9A-BFB4-A4C316217770} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {771CA94F-A3B3-44E6-A857-36F986937FB2}

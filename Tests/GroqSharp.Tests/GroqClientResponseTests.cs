@@ -89,5 +89,20 @@
             // Assert
             Assert.Null(response);
         }
+
+        [Fact]
+        public void FromJson_ValidToolCalls_CreatesCorrectToolCalls()
+        {
+            // Arrange
+            string json = "{\"choices\": [{\"message\": {\"content\": \"Example\", \"tool_calls\": [{\"id\": \"1\", \"type\": \"function\", \"function\": {\"name\": \"Sum\", \"arguments\": \"{\\\"a\\\": 1, \\\"b\\\": 2}\"}}]}}]}";
+
+            // Act
+            var response = GroqClientResponse.FromJson(json);
+
+            // Assert
+            Assert.Single(response.ToolCalls);
+            Assert.Equal("1", response.ToolCalls[0].Id);
+            Assert.Equal("Sum", response.ToolCalls[0].ToolName);
+        }
     }
 }

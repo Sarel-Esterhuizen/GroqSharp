@@ -8,15 +8,28 @@ namespace GroqSharp.Tests
         public void ToJson_SerializesAllPropertiesCorrectly()
         {
             // Arrange
+            var tools = new
+            {
+                type = "function",
+                function = new
+                {
+                    name = "example_tool",
+                    description = "An example tool",
+                    parameters = new { param1 = "value1" }
+                }
+            };
+
             var request = new GroqClientRequest
             {
                 Model = "llama3-70b-8192",
                 Temperature = 0.7,
-                Messages = new Message[] { new Message { Content = "Hello", Role = MessageRole.User } },
+                Messages = new Message[] { new Message { Content = "Hello", Role = MessageRoleType.User } },
                 MaxTokens = 150,
                 TopP = 0.9,
                 Stop = "end",
-                Stream = true
+                Stream = true,
+                Tools = tools,
+                ToolChoice = "auto"
             };
 
             // Act
@@ -30,6 +43,8 @@ namespace GroqSharp.Tests
             Assert.Contains("\"top_p\":0.9", json);
             Assert.Contains("\"stop\":\"end\"", json);
             Assert.Contains("\"stream\":true", json);
+            Assert.Contains("\"tools\":{\"type\":\"function\"", json);
+            Assert.Contains("\"tool_choice\":\"auto\"", json);
         }
 
         [Fact]
@@ -86,6 +101,24 @@ namespace GroqSharp.Tests
 
             // Assert
             Assert.Contains("\"response_format\":{\"type\":\"json_object\"}", json);
+        }
+
+        [Fact]
+        public void ToJson_HandlesNullToolsAndDefaultToolChoiceCorrectly()
+        {
+            // Arrange
+            var request = new GroqClientRequest
+            {
+                Model = "llama3-70b-8192",
+                ToolChoice = "none"  // Explicitly setting default to verify it does not appear if not needed.
+            };
+
+            // Act
+            var json = request.ToJson();
+
+            // Assert
+            Assert.DoesNotContain("\"tools\":", json);
+            Assert.DoesNotContain("\"tool_choice\":", json);  // Assuming default 'none' does not need to be serialized.
         }
     }
 }

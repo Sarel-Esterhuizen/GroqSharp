@@ -1,5 +1,6 @@
 ﻿using GroqSharp;
 using GroqSharp.Models;
+using GroqSharp.Tools;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -7,7 +8,7 @@ using System.Text.Json;
 public class GroqClient :
     IGroqClient
 {
-    private readonly HttpClient _client = new HttpClient();
+    #region Class Fields
 
     private const string DefaultBaseUrl = "https://api.groq.com/openai/v1/chat/completions";
     private const string ContentTypeJson = "application/json";
@@ -17,6 +18,14 @@ public class GroqClient :
     private const string ChoicesKey = "choices";
     private const string DeltaKey = "delta";
     private const string ContentKey = "content";
+    private const string FunctionTypeKey = "function";
+
+    #endregion
+
+    #region Instance Fields
+
+    private readonly HttpClient _client = new HttpClient();
+    private readonly Dictionary<string, IGroqTool> _tools = new Dictionary<string, IGroqTool>();
 
     private string _baseUrl = DefaultBaseUrl;
     private string _model;
@@ -26,6 +35,11 @@ public class GroqClient :
     private string? _stop;
     private Message _defaultSystemMessage;
     private int _maxStructuredRetryAttempts = 3;
+    private int _maxToolInvocationDepth = 3;
+
+    #endregion
+
+    #region Constructors
 
     public GroqClient(
         string apiKey,
@@ -36,6 +50,12 @@ public class GroqClient :
         _client = client ?? new HttpClient();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(BearerTokenPrefix, apiKey);
     }
+
+    #endregion
+
+    #region Instance Methods
+
+    #region Fluent Methods
 
     public IGroqClient SetBaseUrl(
         string baseUrl)
@@ -93,8 +113,109 @@ public class GroqClient :
         return this;
     }
 
+    public IGroqClient SetMaxToolInvocationDepth(
+        int maxDepth)
+    {
+        _maxToolInvocationDepth = maxDepth;
+        return this;
+    }
+
+    public IGroqClient RegisterTools(
+        params IGroqTool[] tools)
+    {
+        foreach (var tool in tools)
+            _tools[tool.Name] = tool;
+        return this;
+    }
+
+    public IGroqClient UnregisterTools(
+        params string[] toolNames)
+    {
+        foreach (var toolName in toolNames)
+        {
+            _tools.Remove(toolName);
+        }
+        return this;
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    public object BuildToolSpecifications()
+    {
+        var toolsList = new List<object>();
+        foreach (var tool in _tools.Values)
+        {
+            var toolSpec = new
+            {
+                type = FunctionTypeKey,
+                function = new
+                {
+                    name = tool.Name,
+                    description = tool.Description,
+                    parameters = tool.Parameters.ToDictionary(
+                        param => param.Key,
+                        param => param.Value.ToJsonSerializableObject()
+                    )
+                }
+            };
+            toolsList.Add(toolSpec);
+        }
+
+        return toolsList;
+    }
+
+    private async Task<string> HandleToolResponsesAndReinvokeAsync(
+        List<Message> messages,
+        GroqClientResponse response,
+        int depth)
+    {
+        // First check if max depth is exceeded
+        if (depth >= _maxToolInvocationDepth)
+        {
+            throw new InvalidOperationException("Maximum tool invocation depth exceeded, possible loop detected.");
+        }
+
+        // Add the assistant's original response to the conversation before handling tool calls
+        if (response.Contents.Any())
+        {
+            messages.Add(new Message
+            {
+                Role = MessageRoleType.Assistant,
+                Content = response.Contents.FirstOrDefault()
+            });
+        }
+
+        // Handle any tool calls
+        if (response.ToolCalls != null && response.ToolCalls.Any())
+        {
+            foreach (var call in response.ToolCalls)
+            {
+                if (_tools.TryGetValue(call.ToolName, out var tool))
+                {
+                    var toolResult = await tool.ExecuteAsync(call.Parameters);
+                    messages.Add(new MessageTool
+                    {
+                        Role = MessageRoleType.Tool,
+                        Content = toolResult,
+                        ToolCallId = call.Id  
+                    });
+                }
+            }
+
+            // Reinvoke the API with the updated messages
+            return await CreateChatCompletionWithToolsAsync(messages, depth);
+        }
+
+        // If there were no tool calls, just return the original response
+        return response.Contents.FirstOrDefault();
+    }
+
+    #endregion
+
     public async Task<string?> CreateChatCompletionAsync(
-        params Message[] messages)
+       params Message[] messages)
     {
         if (messages == null || messages.Length == 0)
         {
@@ -142,15 +263,61 @@ public class GroqClient :
         }
     }
 
+    public async Task<string> CreateChatCompletionWithToolsAsync(
+        List<Message> messages,
+        int depth = 0)
+    {
+        if (depth >= _maxToolInvocationDepth)
+        {
+            throw new InvalidOperationException("Maximum tool invocation depth exceeded, possible loop detected.");
+        }
+
+        if (messages == null || messages.Count == 0)
+        {
+            if (_defaultSystemMessage != null)
+            {
+                messages = [_defaultSystemMessage];
+            }
+            else
+            {
+                throw new ArgumentException("Messages cannot be null or empty", nameof(messages));
+            }
+        }
+
+        // Build request with potential tools included
+        var toolSpecs = BuildToolSpecifications();
+
+        var request = new GroqClientRequest
+        {
+            Model = _model,
+            Messages = messages.ToArray(),
+            Tools = toolSpecs,
+            ToolChoice = "auto"
+        };
+
+        string requestJson = request.ToJson();
+        var content = new StringContent(requestJson, Encoding.UTF8, ContentTypeJson);
+        var response = await _client.PostAsync(_baseUrl, content);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"API request failed: {await response.Content.ReadAsStringAsync()}");
+        }
+
+        var responseJson = await response.Content.ReadAsStringAsync();
+        var chatResponse = GroqClientResponse.TryCreateFromJson(responseJson);
+        return await HandleToolResponsesAndReinvokeAsync(messages, chatResponse, depth + 1);
+    }
+
+
     public async Task<string?> GetStructuredChatCompletionAsync(
-        string jsonStructure, 
+        string jsonStructure,
         params Message[] messages)
     {
         if (messages == null || messages.Length == 0)
         {
             if (_defaultSystemMessage != null)
             {
-                messages = new Message[] { _defaultSystemMessage };
+                messages = [_defaultSystemMessage];
             }
             else
             {
@@ -159,7 +326,7 @@ public class GroqClient :
         }
 
         // Check if a system message is present
-        var systemMessageIndex = messages.ToList().FindIndex(m => m.Role == MessageRole.System);
+        var systemMessageIndex = messages.ToList().FindIndex(m => m.Role == MessageRoleType.System);
         if (systemMessageIndex != -1)
         {
             // Extend the existing system message
@@ -170,7 +337,7 @@ public class GroqClient :
             // Create a new system message with explicit instructions
             var newSystemMessage = new Message
             {
-                Role = MessageRole.System,
+                Role = MessageRoleType.System,
                 Content = $"IMPORTANT: Please respond ONLY in JSON format as follows:\n{jsonStructure}"
             };
             messages = new Message[] { newSystemMessage }.Concat(messages).ToArray();
@@ -270,4 +437,6 @@ public class GroqClient :
             }
         }
     }
+
+    #endregion
 }

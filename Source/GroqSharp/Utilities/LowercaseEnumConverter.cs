@@ -6,6 +6,8 @@ namespace GroqSharp.Utilities
     internal class LowercaseEnumConverter<T> : 
         JsonConverter<T> where T : Enum
     {
+        #region Instance Methods
+
         public override T Read(
             ref Utf8JsonReader reader, 
             Type typeToConvert, 
@@ -22,5 +24,7 @@ namespace GroqSharp.Utilities
         {
             writer.WriteStringValue(value.ToString().ToLowerInvariant());
         }
+
+        #endregion
     }
 }

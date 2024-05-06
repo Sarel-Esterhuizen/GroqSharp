@@ -1,4 +1,6 @@
 ﻿using GroqSharp.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace GroqSharp.Tests.Models
 {
@@ -10,7 +12,7 @@ namespace GroqSharp.Tests.Models
             // Arrange
             var message = new Message
             {
-                Role = MessageRole.System,
+                Role = MessageRoleType.System,
                 Content = "System initialization complete."
             };
 
@@ -19,6 +21,23 @@ namespace GroqSharp.Tests.Models
 
             // Assert
             Assert.Contains("\"role\":\"system\"", json);
+        }
+
+        [Fact]
+        public void ToJson_SerializesContentCorrectly()
+        {
+            // Arrange
+            var message = new Message
+            {
+                Role = MessageRoleType.User,
+                Content = "Hello, World!"
+            };
+
+            // Act
+            var json = message.ToJson();
+
+            // Assert
+            Assert.Contains("\"content\":\"Hello, World!\"", json);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace GroqSharp.Tests
         public async Task CreateChatCompletionAsync_ReturnsCorrectResponse()
         {
             var result = await _client.CreateChatCompletionAsync(
-                new Message { Role = MessageRole.User, Content = "Test Request" }
+                new Message { Role = MessageRoleType.User, Content = "Test Request" }
             );
 
             Assert.Equal("Response content", result);
@@ -56,7 +56,7 @@ namespace GroqSharp.Tests
             });
 
             var ex = await Assert.ThrowsAsync<ApplicationException>(() => _client.CreateChatCompletionAsync(
-                new Message { Role = MessageRole.User, Content = "Test Request" }
+                new Message { Role = MessageRoleType.User, Content = "Test Request" }
             ));
 
             Assert.Contains("Failed", ex.Message);
@@ -85,7 +85,7 @@ namespace GroqSharp.Tests
             var result = new List<string>();
 
             await foreach (var item in _client.CreateChatCompletionStreamAsync(
-                new Message { Role = MessageRole.User, Content = "Test Request" }
+                new Message { Role = MessageRoleType.User, Content = "Test Request" }
             ))
             {
                 result.Add(item);
@@ -112,7 +112,7 @@ namespace GroqSharp.Tests
 
             var response = await _client.GetStructuredChatCompletionAsync(
                 jsonStructure,
-                new Message { Role = MessageRole.User, Content = "Explain the importance of fast language models" }
+                new Message { Role = MessageRoleType.User, Content = "Explain the importance of fast language models" }
             );
 
             Assert.Equal("Response content", response);
@@ -142,7 +142,7 @@ namespace GroqSharp.Tests
 
             var ex = await Assert.ThrowsAsync<ApplicationException>(() => _client.GetStructuredChatCompletionAsync(
                 jsonStructure,
-                new Message { Role = MessageRole.User, Content = "Explain the importance of fast language models" }
+                new Message { Role = MessageRoleType.User, Content = "Explain the importance of fast language models" }
             ));
 
             Assert.Contains("Failed", ex.Message);

@@ -1,4 +1,5 @@
 ﻿using GroqSharp.Models;
+using GroqSharp.Tools;
 
 namespace GroqSharp
 {
@@ -6,6 +7,10 @@ namespace GroqSharp
     {
         Task<string> CreateChatCompletionAsync(
             params Message[] messages);
+
+        Task<string> CreateChatCompletionWithToolsAsync(
+            List<Message> messages,
+            int depth = 0);
 
         IAsyncEnumerable<string> CreateChatCompletionStreamAsync(
             params Message[] messages);
@@ -29,5 +34,9 @@ namespace GroqSharp
         IGroqClient SetTopP(double? topP);
 
         IGroqClient SetStructuredRetryPolicy(int maxRetryAttempts);
+
+        IGroqClient RegisterTools(params IGroqTool[] tools);
+
+        IGroqClient UnregisterTools(params string[] toolNames);
     }
 }
