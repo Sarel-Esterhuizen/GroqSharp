@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Samples.ToolInteg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroqSharp.Samples.ChatStreaming", "Samples\GroqSharp.Samples.ChatStreaming\GroqSharp.Samples.ChatStreaming.csproj", "{FAD868B7-556E-4D9A-BFB4-A4C316217770}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroqSharp.Samples.StructuredPoco", "Samples\GroqSharp.Samples.StructuredPoco\GroqSharp.Samples.StructuredPoco.csproj", "{3AED52C4-A93B-4253-AE16-DAFE30378E04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{FAD868B7-556E-4D9A-BFB4-A4C316217770}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAD868B7-556E-4D9A-BFB4-A4C316217770}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAD868B7-556E-4D9A-BFB4-A4C316217770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AED52C4-A93B-4253-AE16-DAFE30378E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AED52C4-A93B-4253-AE16-DAFE30378E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AED52C4-A93B-4253-AE16-DAFE30378E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AED52C4-A93B-4253-AE16-DAFE30378E04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{A4C8BBC0-F517-4CDD-867D-99C097D061A0} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
 		{FF084234-9F51-456C-8EC1-2F9D2AE14D19} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
 		{FAD868B7-556E-4D9A-BFB4-A4C316217770} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
+		{3AED52C4-A93B-4253-AE16-DAFE30378E04} = {967C88C3-30F5-4EE0-A2DC-C28A6F96D32E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {771CA94F-A3B3-44E6-A857-36F986937FB2}

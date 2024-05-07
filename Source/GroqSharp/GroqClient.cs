@@ -1,6 +1,7 @@
 ﻿using GroqSharp;
 using GroqSharp.Models;
 using GroqSharp.Tools;
+using GroqSharp.Utilities;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -19,6 +20,8 @@ public class GroqClient :
     private const string DeltaKey = "delta";
     private const string ContentKey = "content";
     private const string FunctionTypeKey = "function";
+
+    private static readonly Dictionary<Type, string> _typeCache = new Dictionary<Type, string>();
 
     #endregion
 
@@ -199,7 +202,7 @@ public class GroqClient :
                     {
                         Role = MessageRoleType.Tool,
                         Content = toolResult,
-                        ToolCallId = call.Id  
+                        ToolCallId = call.Id
                     });
                 }
             }
@@ -211,6 +214,8 @@ public class GroqClient :
         // If there were no tool calls, just return the original response
         return response.Contents.FirstOrDefault();
     }
+
+
 
     #endregion
 
@@ -380,6 +385,51 @@ public class GroqClient :
         }
 
         return null;
+    }
+
+    public async Task<TResponse?> GetStructuredChatCompletionAsync<TResponse>(
+        params Message[] messages) 
+        where TResponse : class, new()
+    {
+        if (messages == null || messages.Length == 0)
+        {
+            throw new ArgumentException("Messages cannot be null or empty");
+        }
+
+        // Generate the JSON structure from the response type
+        string jsonStructure = JsonStructureUtility.CreateJsonStructureFromType(typeof(TResponse), _typeCache);
+
+        // Extend the system message to include the JSON structure
+        var systemMessageIndex = messages.ToList().FindIndex(m => m.Role == MessageRoleType.System);
+        if (systemMessageIndex != -1)
+        {
+            messages[systemMessageIndex].Content += $" IMPORTANT: Please respond ONLY in JSON format as follows: {jsonStructure}";
+        }
+        else
+        {
+            // Add a new system message if none exists
+            var newSystemMessage = new Message
+            {
+                Role = MessageRoleType.System,
+                Content = $"IMPORTANT: Please respond ONLY in JSON format as follows:\n{jsonStructure}"
+            };
+            var messageList = new List<Message>(messages) { newSystemMessage };
+            messages = messageList.ToArray();
+        }
+
+        // Call the existing method to get the JSON response
+        string jsonResponse = await GetStructuredChatCompletionAsync(jsonStructure, messages);
+
+        if (string.IsNullOrEmpty(jsonResponse))
+        {
+            throw new InvalidOperationException("Received an empty response from the API.");
+        }
+
+        // Deserialize the JSON response back into the expected type
+        TResponse responsePoco = JsonSerializer.Deserialize<TResponse>(jsonResponse) ??
+                                 throw new InvalidOperationException("Failed to deserialize the response.");
+
+        return responsePoco;
     }
 
     public async IAsyncEnumerable<string> CreateChatCompletionStreamAsync(

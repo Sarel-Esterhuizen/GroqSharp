@@ -19,6 +19,10 @@ namespace GroqSharp
             string jsonStructure,
             params Message[] messages);
 
+        Task<TResponse?> GetStructuredChatCompletionAsync<TResponse>(
+            params Message[] messages)
+            where TResponse : class, new();
+
         IGroqClient SetBaseUrl(string baseUrl);
 
         IGroqClient SetDefaultSystemMessage(Message message);

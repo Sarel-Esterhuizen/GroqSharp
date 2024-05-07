@@ -60,6 +60,7 @@ Explore sample projects that demonstrate various capabilities of GroqSharp:
 - [**Chat Basics**](./Samples/GroqSharp.Samples.ChatBasics/README.md) - Basic chat functionalities.
 - [**Chat Streaming**](./Samples/GroqSharp.Samples.ChatStreaming/README.md) - Streaming responses for dynamic interaction.
 - [**Structured Data**](./Samples/GroqSharp.Samples.StructuredData/README.md) - Handling structured JSON responses.
+- [**Structured Poco**](./Samples/GroqSharp.Samples.StructuredPoco/README.md) - Map structured JSON responses to POCOs.
 - [**Tool Integration**](./Samples/GroqSharp.Samples.ToolIntegration/README.md) - Using custom tools for enhanced functionalities.
 
 ## Contributing
