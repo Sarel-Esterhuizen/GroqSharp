@@ -52,8 +52,18 @@ namespace GroqSharp.Samples.StructuredPoco
 
                 if (response != null)
                 {
-                    foreach (var hero in response.Results)
-                        Console.WriteLine($"Name: {hero.Name}, Rank: {hero.Powers.Rank}, Abilities: {hero.Powers.Abilities}");
+                    foreach (var item in response.Results)
+                    {
+                        Console.WriteLine(
+                            $"Name:        {item.Name}\n" +
+                            $"Description: {item.Description}\n" +
+                            $"Real Name:   {item.RealName}\n" +
+                            $"Age:         {item.Age}\n" +
+                            $"Rate:        {item.HiringRatePerHour}\n" +
+                            $"Rank:        {item.Powers.Rank}\n" +
+                            $"Abilities:   {item.Powers.Abilities}\n");
+                        Console.WriteLine("---");
+                    }
                 }
                 else
                 {
@@ -68,6 +78,39 @@ namespace GroqSharp.Samples.StructuredPoco
             Console.WriteLine("\n[Enter to continue]");
             Console.ReadLine();
         }
+    }
+}
+```
+
+## Context Attributes
+
+In this sample, we enhance our POCO models using `GroqSharp.Annotations` to provide more explicit context to each property. These attributes allow developers to define additional metadata for properties, which can be used to enforce data validation and improve readability and maintenance of the code. Here's how you can apply these annotations:
+
+```csharp
+using GroqSharp.Annotations;
+
+namespace GroqSharp.Samples.StructuredPoco.Models
+{
+    public class SuperHero
+    {
+        [ContextDescription("Name of the superhero - make it up not a common name")]
+        public string Name { get; set; }
+
+        [ContextDescription("Description of the superhero as a pirate")]
+        [ContextLength(250)]
+        public string Description { get; set; }
+
+        public string RealName { get; set; }
+
+        [ContextDescription("The age in human years")]
+        [ContextRange(min:0, max:1000)]
+        public int Age { get; set; }
+
+        [ContextDescription("The freelance hiring rate in dollars and cents")]
+        [ContextRange(min: 10.00, max: 999.99)]
+        public double HiringRatePerHour { get; set; }
+
+        public PowerDetail Powers { get; set; }
     }
 }
 ```

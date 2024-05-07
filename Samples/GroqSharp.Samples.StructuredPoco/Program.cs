@@ -8,7 +8,9 @@ namespace GroqSharp.Samples.StructuredPoco
         static async Task Main(string[] args)
         {
             var apiKey = Environment.GetEnvironmentVariable("GROQ_API_KEY");
-            var apiModel = "llama3-70b-8192";
+            //var apiModel = "llama3-70b-8192"; 
+            //var apiModel = "llama3-8b-8192";
+            var apiModel = "mixtral-8x7b-32768";
 
             IGroqClient groqClient = new GroqClient(apiKey, apiModel);
 
@@ -22,7 +24,18 @@ namespace GroqSharp.Samples.StructuredPoco
                 if (response != null)
                 {
                     foreach (var item in response.Results)
-                        Console.WriteLine($"Name: {item.Name}, Rank: {item.Powers.Rank}, Abilities: {item.Powers.Abilities}");
+                    {
+                        Console.WriteLine(
+                            $"Name:        {item.Name}\n" +
+                            $"Description: {item.Description}\n" +
+                            $"Real Name:   {item.RealName}\n" +
+                            $"Age:         {item.Age}\n" +
+                            $"Rate:        {item.HiringRatePerHour}\n" +
+                            $"Rank:        {item.Powers.Rank}\n" +
+                            $"Abilities:   {item.Powers.Abilities}\n");
+                        Console.WriteLine("---");
+                    }
+
                 }
                 else
                 {

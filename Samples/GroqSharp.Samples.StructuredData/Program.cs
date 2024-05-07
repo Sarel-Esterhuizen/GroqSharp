@@ -2,20 +2,18 @@
 using GroqSharp.Models;
 
 var apiKey = Environment.GetEnvironmentVariable("GROQ_API_KEY");
+//var apiModel = "mixtral-8x7b-32768";
 var apiModel = "llama3-70b-8192";
 
-IGroqClient groqClient = new GroqClient(apiKey, apiModel)
-    .SetTemperature(0.5)
-    .SetMaxTokens(512)
-    .SetTopP(1)
-    .SetStop("NONE");
+IGroqClient groqClient = new GroqClient(apiKey, apiModel);
 
 var jsonStructure = @"
         {
-            ""name"": ""string"",
+            ""name"": ""string | The name of the pokemon"",
+            ""description"": ""string | A detailed and long description of the pokemon | Length: 300 characters"",
             ""powers"": {
-                ""rank"": ""string"",
-                ""abilities"": ""string""
+                ""rank"": ""number | A numeric number between 1 and 10 indicating stregnth"",
+                ""abilities"": ""string | A comma seperated list of all the main powers""
             }
         }";
 

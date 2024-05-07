@@ -330,6 +330,17 @@ public class GroqClient :
             }
         }
 
+        // Sanitize jsonStructure
+        try
+        {
+            var jsonObject = JsonSerializer.Deserialize<JsonElement>(jsonStructure);
+            jsonStructure = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions { WriteIndented = false });
+        }
+        catch (JsonException ex)
+        {
+            throw new ArgumentException("Invalid JSON format", nameof(jsonStructure), ex);
+        }
+
         // Check if a system message is present
         var systemMessageIndex = messages.ToList().FindIndex(m => m.Role == MessageRoleType.System);
         if (systemMessageIndex != -1)
@@ -348,22 +359,24 @@ public class GroqClient :
             messages = new Message[] { newSystemMessage }.Concat(messages).ToArray();
         }
 
-        var request = new GroqClientRequest
-        {
-            Model = _model,
-            Temperature = _temperature,
-            Messages = messages,
-            MaxTokens = _maxTokens,
-            TopP = _topP,
-            Stop = _stop
-        };
-
+        var currentMessages = messages.ToList();
+        var currentRequestJson = "";
         for (int attempt = 1; attempt <= _maxStructuredRetryAttempts; attempt++)
         {
+            var request = new GroqClientRequest
+            {
+                Model = _model,
+                Temperature = _temperature,
+                Messages = currentMessages.ToArray(),
+                MaxTokens = _maxTokens,
+                TopP = _topP,
+                Stop = _stop
+            };
+
             try
             {
-                string requestJson = request.ToJson();
-                var httpContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+                currentRequestJson = request.ToJson();
+                var httpContent = new StringContent(currentRequestJson, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(_baseUrl, httpContent);
 
                 if (!response.IsSuccessStatusCode)
@@ -388,7 +401,7 @@ public class GroqClient :
     }
 
     public async Task<TResponse?> GetStructuredChatCompletionAsync<TResponse>(
-        params Message[] messages) 
+        params Message[] messages)
         where TResponse : class, new()
     {
         if (messages == null || messages.Length == 0)
@@ -417,19 +430,34 @@ public class GroqClient :
             messages = messageList.ToArray();
         }
 
-        // Call the existing method to get the JSON response
-        string jsonResponse = await GetStructuredChatCompletionAsync(jsonStructure, messages);
-
-        if (string.IsNullOrEmpty(jsonResponse))
+        for (int attempt = 1; attempt <= _maxStructuredRetryAttempts; attempt++)
         {
-            throw new InvalidOperationException("Received an empty response from the API.");
+            try
+            {
+                // Call the existing method to get the JSON response
+                string jsonResponse = await GetStructuredChatCompletionAsync(jsonStructure, messages);
+
+                if (string.IsNullOrEmpty(jsonResponse))
+                {
+                    throw new InvalidOperationException("Received an empty response from the API.");
+                }
+
+                // Deserialize the JSON response back into the expected type
+                TResponse responsePoco = JsonSerializer.Deserialize<TResponse>(jsonResponse) ??
+                                         throw new InvalidOperationException("Failed to deserialize the response.");
+
+                return responsePoco;
+            }
+            catch (Exception ex)
+            {
+                if (attempt == _maxStructuredRetryAttempts)
+                {
+                    throw new ApplicationException("Failed to create chat completion", ex);
+                }
+            }
         }
 
-        // Deserialize the JSON response back into the expected type
-        TResponse responsePoco = JsonSerializer.Deserialize<TResponse>(jsonResponse) ??
-                                 throw new InvalidOperationException("Failed to deserialize the response.");
-
-        return responsePoco;
+        return null;
     }
 
     public async IAsyncEnumerable<string> CreateChatCompletionStreamAsync(
